@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="我有一头小毛驴，可是我从来都不骑。">
+<meta name="description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="First Night">
-<meta property="og:url" content="http://yoursite.com/2018/03/04/first/index.html">
+<meta property="og:title" content="警惕System.Environment.CurrentDirectory的陷阱">
+<meta property="og:url" content="http://yoursite.com/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/index.html">
 <meta property="og:site_name" content="Helius随心记">
-<meta property="og:description" content="我有一头小毛驴，可是我从来都不骑。">
+<meta property="og:description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-04T11:22:04.154Z">
+<meta property="og:updated_time" content="2018-03-08T15:24:52.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="First Night">
-<meta name="twitter:description" content="我有一头小毛驴，可是我从来都不骑。">
+<meta name="twitter:title" content="警惕System.Environment.CurrentDirectory的陷阱">
+<meta name="twitter:description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/04/first/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/"/>
 
 
 
 
 
-  <title>First Night | Helius随心记</title>
+  <title>警惕System.Environment.CurrentDirectory的陷阱 | Helius随心记</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/04/first/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Helius">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">First Night</h1>
+          <h1 class="post-title" itemprop="name headline">警惕System.Environment.CurrentDirectory的陷阱</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-04T19:13:33+08:00">
-                2018-03-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-17T23:27:35+08:00">
+                2018-03-17
               </time>
             
 
@@ -299,9 +299,27 @@
       
 
       
-        <blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
+        <p>最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。</p>
+<blockquote>
+<p>情景回放 <br></p>
+<ul>
+<li>在程序里面是采用下面方式来获取应用程序启动路径：</li>
+</ul>
 </blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Path.Combine(Environment.CurrentDirectory, &quot;ToolbarResources_/Emoticon_Normal.svg&quot;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这时候把应用程序打包成exe进行安装，会产生桌面的快捷方式，双击桌面的快捷方式运行，发现Environment.CurrentDirectory获取到的路径为：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>为什么会获取到奇怪路径？</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 确实是获取当前目录没错，但是如果A程序调用B程序，而B程序里使用了<em>System.Evnironment.CurrentDirectory</em>来获取目录，那个B程序里获取到的目录就不再是B程序exe文件所在的文件夹路径了，而是变成了A所在目录了。这就很明了的解释了上面会出现<strong><em>C:\Windows\System32</em></strong>这个奇怪路径的问题了，因为桌面快捷方式是采用<em>cmd.exe</em>去执行的，而这个cmd.exe执行文件就是在<strong><em>C:\Windows\System32</em></strong>的目录下。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 还有一个重要的问题，假如你的应用程序采用OpenFileDialog去打开E盘下名为abc的文件夹下的一个文件，那么获取到的值就为E:\abc了。</p>
+<blockquote>
+<p>后续我们应该怎么做？</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;如果是WPF还是Winform，要获取当前应用程序所在目录最好不要用<em>System.Environment.CurrentDirectory</em> ，而应该改为：<strong><em>==Application.StartupPath==</em></strong> ，这样子不管谁调起应用程序或者中间用OpenFileDialog打开了什么文件，这样获取到的路径都没问题的。</p>
 
       
     </div>
@@ -326,15 +344,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/04/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/17/理想程序员/" rel="prev" title="理想程序员">
+                理想程序员 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
