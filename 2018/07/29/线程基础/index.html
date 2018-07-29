@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="目录   Windows为什么要支持线程，与使用线程的理由 线程开销 CLR线程与Windows线程 使用专用线程执行异步的计算限制操作 线程调度与优先级 前台线程与后台线程   1、Windows为什么要支持线程，与使用线程的理由  &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;背景：&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;早期的操作系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Helius随心记">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/线程基础/index.html">
+<meta property="og:site_name" content="Helius随心记">
+<meta property="og:description" content="目录   Windows为什么要支持线程，与使用线程的理由 线程开销 CLR线程与Windows线程 使用专用线程执行异步的计算限制操作 线程调度与优先级 前台线程与后台线程   1、Windows为什么要支持线程，与使用线程的理由  &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;背景：&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;早期的操作系">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T09:15:34.060Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Helius随心记">
+<meta name="twitter:description" content="目录   Windows为什么要支持线程，与使用线程的理由 线程开销 CLR线程与Windows线程 使用专用线程执行异步的计算限制操作 线程调度与优先级 前台线程与后台线程   1、Windows为什么要支持线程，与使用线程的理由  &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;背景：&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;早期的操作系">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/29/线程基础/"/>
+
+
+
+
+
+  <title> | Helius随心记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Helius随心记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/线程基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Helius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Helius随心记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-29T22:35:13+08:00">
+                2018-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>目录</p>
+</blockquote>
+<ul>
+<li>Windows为什么要支持线程，与使用线程的理由</li>
+<li>线程开销</li>
+<li>CLR线程与Windows线程</li>
+<li>使用专用线程执行异步的计算限制操作</li>
+<li>线程调度与优先级</li>
+<li>前台线程与后台线程</li>
+</ul>
+<blockquote>
+<p>1、Windows为什么要支持线程，与使用线程的理由</p>
+</blockquote>
+<h5 id="nbsp-nbsp-nbsp-nbsp-背景："><a href="#nbsp-nbsp-nbsp-nbsp-背景：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;背景："></a>&nbsp;&nbsp;&nbsp;&nbsp;背景：</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;早期的操作系统是没有线程的概念，整个系统只运行着一个执行线程，这样子就容易出现机器被“冻结”。原因在于如果一个运行的任务长时间运行的话，就会导致OS和其它应用程序停止响应，这种时候只能重启机器了。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 为了解决这种问题，微软重新设计了OS，使它具有健壮、可靠、易于伸缩和安全。微软在设计这个OS内核时，决定在一个进程中运行应用程序的每个实例。每个进程都会被赋予一个虚拟地址空间，确保在一个进程中无法破坏另一个进程使用的代码或数据。除此之外，进程是访问不了OS的内核代码的，所以应用程序代码破坏不了操作系统代码与数据，这就保证了系统安全性。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>除了做出上述的动作之外，微软还对CPU执行一个死循环就会宕机的问题就行了修正。他们提出的方案就是线程。它是一个Windows的概念，线程的职责是对CPU进行虚拟化。Windows为每个进程都提供了该进程专用的线程。当应用程序进入死循环后，与那个代码关联的线程会自己“冻结”，但不会影响其它的进程，它们“安然无恙”的继续执行。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>综上所述，使用线程可以带来两个好处：<br>（1）可响应性（通常是对于客户端GUI应用程序）;<br>（2）性能（对客户端和服务器应用程序且多核CPU）</p>
+<blockquote>
+<p>2、线程开销</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>线程看起来真的很强大，让用户的体验也越来越友善。但它并不是没有成本的，它有空间（内存耗用）和时间（运行时的执行性能）上的开销。</p>
+<ul>
+<li>线程内核对象（thread kernel object）</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>OS为系统中创建的每个线程都分配并初始化了这种数据结构，它包含一组对线程进行描述的属性；</p>
+<ul>
+<li>线程环境块（thread environment block,TEB）</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>TEB 是在用户模式（应用程序代码能快速访问的地址空间）中分配和初始化的内存块。</p>
+<ul>
+<li>用户模式栈（user-mode stack）</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>用户模式栈存储传给方法的局部变量和实参。其中还包含一个地址：当前方法返回时，线程应该从什么地方接着执行。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>Windows默认为每个线程的用户模式栈分配1MB内存。更具体的说，Windows只是保留1MB地址空间，在线程实际需要时才会提交物理内存。</p>
+<ul>
+<li>内核模式栈（kernel-mode stack）</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>应用程序在将实参传递给内核模式函数时，Windows都会把它们从线程的用户模式栈复制到线程的内核模式栈。在32位Windows上运行，内核模式栈大小是12KB；64位Windows是24KB。</p>
+<ul>
+<li>DLL线程连接（attach）和线程分离（detach）通知</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>Windows的一个策略是，任何时候在进程中创建线程，都会调用进程中加载的所有非托管DLL的DllMain方法，并向该方法传递DLL_THREAD_ATTACH标志。当线程终止时，也会调用该方法，并传递DLL_THREAD_DETACH标志。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C#和其他大多数托管编程语言生成的DLL没有DllMain函数。所以自然不会受到影响。然而非托管dll中，可以调用Win32 的DisbaleThreadLibraryCalls函数来决定不理会这些通知。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>我们都知道，单CPU计算机一次只能做一件事情，所以Windows必须在系统中的所有线程（逻辑CPU）中间共享物理CPU。也就代表着Windows任何时刻只能将一个线程分配给一个CPU，而这个线程能运行的时间就是一个“时间片（大约30ms）”。时间片一到期，Windows就上下文切换到另外一个线程，其都要做以下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">（1）将CPU寄存器的值保存到当前正在运行的线程的内核对象内部的一个上下文结构中；</span><br><span class="line">（2）从现有线程集合中选出一个线程供调度。如果该线程由另一个进程拥有，Windows在开始执行任何代码或者接触任何数据之前，还必须切换CPU“看见”的虚拟地址空间；</span><br><span class="line">（3）将所选上下文结构中的值加载到CPU的寄存器中。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>以上的操作都是净开销（上下文切换），但是为了向用户提供一个健壮的、响应灵敏的操作系统，微软做了这样的牺牲。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">事实上，上下文切换对性能的影响可能超出你的想象。当Windows上下文切换到新线程时，这个新线程极有可能要执行不同的代码并访问不同的数据，这个代码和数据都不在CPU的高速缓存中。因此CPU必须访问RAM来填充它的高速缓存，以恢复高速执行状态。但在30ms之后，一次新的上下文切换又发生了。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>根据上述的讨论，在设计自己的代码时，要构建高性能应用程序和组件时，上下文切换能避免就尽量避免。此外，在执行垃圾回收的时候，CLR必须挂起（暂停）所有线程，遍历它们的栈来查找根以便对堆中的对象进行标记，再次遍历它们的栈再回复所有线程。所以，减少线程的数量也会显著提升垃圾回收器的性能，同时也不会耗用大量内存，与更多的时间来创建、销毁和管理。</p>
+<blockquote>
+<p>3、CLR线程和Windows线程</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>目前，CLR线程就等于Windows线程。</p>
+<blockquote>
+<p>4、使用专用线程执行异步的计算限制操作</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>一般来说，我们都习惯显示创建线程来专门执行一个计算限制的操作。如果执行的代码要求线程处于一种特定状态，而这种状态对于线程池线程来说是非同寻常，就可以考虑创建专用线程。例如，满足以下任何条件，就可以显示创建自己的线程：</p>
+<ul>
+<li>线程需要以非普通线程优先级运行</li>
+<li>需要线程表现为一个前台线程，防止应用程序在线程结束任务前终止</li>
+<li>计算限制的任务需要长时间运行</li>
+<li>要启动线程，并可能调用Thread的Abort方法来提前终止它。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>为了创建专用线程，要构造System.Threading.Thread类的实例，向构造器传递一个方法名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public sealed class Thread : CriticalFinalizerObject, _Thread</span><br><span class="line">&#123;</span><br><span class="line">    [SecuritySafeCritical]</span><br><span class="line">    public Thread(ThreadStart start)</span><br><span class="line">    &#123;</span><br><span class="line">       ... // 这个构造器会用得比较少，因为它们的功能十分有限</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    [SecuritySafeCritical]</span><br><span class="line">    public Thread(ParameterizedThreadStart start)</span><br><span class="line">    &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[ComVisible(false)]</span><br><span class="line">public delegate void ParameterizedThreadStart(object obj);</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>应用代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Program</span><br><span class="line">&#123;</span><br><span class="line">    static void Main(string[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine($&quot;主线程 ID:&#123;Thread.CurrentThread.ManagedThreadId&#125;&quot;);</span><br><span class="line"></span><br><span class="line">        Thread thread = new Thread(ComputeBoundOp);</span><br><span class="line">        thread.Start(5);</span><br><span class="line"></span><br><span class="line">        Console.WriteLine($&quot;做一些其它事情&quot;);</span><br><span class="line">        Thread.Sleep(1000);</span><br><span class="line"></span><br><span class="line">        thread.Join();</span><br><span class="line">        Console.WriteLine($&quot;程序结束啦&quot;);</span><br><span class="line"></span><br><span class="line">        Console.ReadKey();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void ComputeBoundOp(object state)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine($&quot;In ComputeBoundOp:state=&#123;state&#125;&quot;);</span><br><span class="line">        Thread.Sleep(1000);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>5、线程调度与优先级</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>说完上面的基础，现在就来说说Windows线程调度的情况。Windows又被称为抢占式多线程（preemptive multithreaded）操作系统，因为线程可在任何时间停止（被抢占）并调度另一个线程。应用的作者在这个方面是有一定控制权的，虽然不多，但记住一点：==应用作者不能保证自己的线程一直运行，也阻止不了其他线程的运行。==</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">举个例子：</span><br><span class="line">    如何保证线程在发生某个事件后的一段时间内开始运行？</span><br><span class="line">    答案是：保证不了。</span><br><span class="line">    原因：Windows不是实时操作系统。且CLR使托管代码的行为也变得更不“实时”了。之所以要这么设计，是出于许多方面的原因，包括DLL的JIT（just-in-time）加载、代码的JIT编译以及垃圾回收器无法预测的介入时间等。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>Windows将线程分了优先级，数值从0（最低）到31（最高）的优先级。并且以下面的方式调度：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">系统决定为CPU分配哪个线程时，首先检查优先级为31的线程，并以一种轮流方式调度它们。如果优先级31的线程可以调度，就把它分配给CPU。在这个线程的时间片结束时，系统检查是否有另一个优先级为31的线程可以运行，如果时，就按上面说的方式继续执行。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>这就造成一种情况，只要存在可调度的优先级31的线程，系统就永远不会将优先级0~30的任何线程分配给CPU，这种情况成为“饥饿”。同时，较高优先级的线程总是会抢占较低优先级的线程，无论正在运行的是什么较低优先级的线程。只要有一个较高优先级的线程准备好运行，系统会立即挂起（暂停）较低优先级的线程（即使后面的时间片还没有用完）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">系统启动时会创建一个特殊的“零页线程（zero page thread）”，它的作用是将系统RAM的所有空闲页清零。</span><br><span class="line">该线程的优先级是0，而且是整个系统唯一优先级为0的线程。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>当然，微软知道开发人员在为线程分配优先级时很难做到完全合理，所以应用程序永远不直接处理这些优先级，相反，他们公开了优先级系统的一个抽象层：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>进程优先级类：进程是一个优先级类的成员</p>
+<ul>
+<li>Idle</li>
+<li>Below Normal</li>
+<li>Normal （默认）</li>
+<li>Above Normal</li>
+<li>High</li>
+<li>Realtime</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>线程优先级：进程中各个线程分配相对优先级</p>
+<ul>
+<li>Idle</li>
+<li>Lowest</li>
+<li>Below Normal</li>
+<li>Normal</li>
+<li>Above Normal</li>
+<li>Highest</li>
+<li>Time-Critical</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">优先级类和优先级是两个概念。从定义上来说，每个县城的优先级取决于两个标准：</span><br><span class="line">（1）它的进程优先级类</span><br><span class="line">（2）在其进程的优先级类中，线程的优先级。</span><br><span class="line">优先级类和优先级合并构成了一个线程的“基础优先级（base priority）”</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>下表总结了进程的优先级类和线程的相对优先级与（0-31）优先级的映射关系：</p>
+<table>
+<thead>
+<tr>
+<th>（↓相对线程优先级）（→进程优先级类）</th>
+<th>Idle</th>
+<th>Below Normal</th>
+<th>Normal （默认）</th>
+<th>Above Normal</th>
+<th>High</th>
+<th>Realtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time-Critical</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>31</td>
+</tr>
+<tr>
+<td>Highest</td>
+<td>6</td>
+<td>8</td>
+<td>10</td>
+<td>12</td>
+<td>15</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Above Normal</td>
+<td>5</td>
+<td>7</td>
+<td>9</td>
+<td>11</td>
+<td>14</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Normal</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+<td>10</td>
+<td>13</td>
+<td>24</td>
+</tr>
+<tr>
+<td>Below Normal</td>
+<td>3</td>
+<td>5</td>
+<td>7</td>
+<td>9</td>
+<td>12</td>
+<td>23</td>
+</tr>
+<tr>
+<td>Lowest</td>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+<td>11</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Idle</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">上述表中有几个需要注意的：</span><br><span class="line">（1）没有值为0的线程优先级，因为0优先级保留给零页线程了，系统不允许其他线程的优先级为0；</span><br><span class="line">（2）17,18,19,20,21,27,28,29或者30的优先也不能获取，以内核模式运行的设备驱动程序才能获得这些优先级，用户模式的应用不能。</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>大多数进程都由Windows资源管理器启动的，二后者在Normal优先级类中生产它的所有子进程。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>另一方面，应用程序可更改其线程的相对线程优先级，这就需要设置Thread的Priority属性，该属性有5个值：</p>
+<ul>
+<li>Lowest</li>
+<li>BelowNormal</li>
+<li>Normal</li>
+<li>AboveNormal</li>
+<li>Highest</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CLR为自己保留了Idle和Time-Critical优先级。</span><br><span class="line">Time-Critical优先级一般都会运行CLR终结器线程。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>6、前台线程与后台线程<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>CLR中的每个线程，不是前台线程，就是后台线程。一个进程的所有前台线程都停止运行时，CLR会强制终止仍在运行的任何后台线程，这些后台线程被直接终止；并不会抛出异常。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在线程的生存期中，任何时候都可以从前台变成后台，又或者从后台变成前台。</span><br><span class="line">Thread thread = new Thread(Worker);</span><br><span class="line">thread.IsBackground = true; // 创建新线程并成为后台线程</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/双击桌面快捷方式时，系统怎么做/" rel="next" title="双击桌面快捷方式或者文件，系统做了什么">
+                <i class="fa fa-chevron-left"></i> 双击桌面快捷方式或者文件，系统做了什么
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Helius</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-背景："><span class="nav-number">1.</span> <span class="nav-text">    背景：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Helius</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
