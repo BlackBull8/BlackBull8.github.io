@@ -1116,7 +1116,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/" itemprop="url">警惕System.Environment.CurrentDirectory的陷阱</a></h1>
+                <a class="post-title-link" href="/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1183,7 +1183,7 @@
 <blockquote>
 <p>为什么会获取到奇怪路径？</p>
 </blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 确实是获取当前目录没错，但是如果A程序调用B程序，而B程序里使用了<em>System.Evnironment.CurrentDirectory</em>来获取目录，那个B程序里获取到的目录就不再是B程序exe文件所在的文件夹路径了，而是变成了A所在目录了。这就很明了的解释了上面会出现<strong><em>C:\Windows\System32</em></strong>这个奇怪路径的问题了，因为桌面快捷方式是采用<em>cmd.exe</em>去执行的，而这个cmd.exe执行文件就是在<strong><em>C:\Windows\System32</em></strong>的目录下。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 确实是获取当前目录没错，但是如果A程序调用B程序，而B程序里使用了<em>System.Evnironment.CurrentDirectory</em>来获取目录，那个B程序里获取到的目录就不再是B程序exe文件所在的文件夹路径了，而是变成了A所在目录了。这就很明了的解释了上面会出现<strong><em>C:\Windows\System32</em></strong>这个奇怪路径的问题了，因为桌面快捷方式是采用<em>explorer.exe</em>去执行的，而这个explorer.exe执行文件就是在<strong><em>C:\Windows\System32</em></strong>的目录下。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 还有一个重要的问题，假如你的应用程序采用OpenFileDialog去打开E盘下名为abc的文件夹下的一个文件，那么获取到的值就为E:\abc了。</p>
 <blockquote>
 <p>后续我们应该怎么做？</p>

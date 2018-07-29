@@ -81,14 +81,14 @@
 
 <meta name="description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="警惕System.Environment.CurrentDirectory的陷阱">
+<meta property="og:title" content="Helius随心记">
 <meta property="og:url" content="http://yoursite.com/2018/03/17/警惕System.Environment.CurrentDirectory的陷阱/index.html">
 <meta property="og:site_name" content="Helius随心记">
 <meta property="og:description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-08T15:24:52.107Z">
+<meta property="og:updated_time" content="2018-07-29T15:00:07.432Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="警惕System.Environment.CurrentDirectory的陷阱">
+<meta name="twitter:title" content="Helius随心记">
 <meta name="twitter:description" content="最近在做项目的时候，遇到了一个Bug，然而这个Bug在VS调试时却是不会出现的，那就是使用System.Environment.CurrentDirectory获取程序路径。  情景回放   在程序里面是采用下面方式来获取应用程序启动路径：   1Path.Combine(Environment.CurrentDirectory, &amp;quot;ToolbarResources_/Emoticon_">
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>警惕System.Environment.CurrentDirectory的陷阱 | Helius随心记</title>
+  <title> | Helius随心记</title>
   
 
 
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">警惕System.Environment.CurrentDirectory的陷阱</h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -314,7 +314,7 @@
 <blockquote>
 <p>为什么会获取到奇怪路径？</p>
 </blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 确实是获取当前目录没错，但是如果A程序调用B程序，而B程序里使用了<em>System.Evnironment.CurrentDirectory</em>来获取目录，那个B程序里获取到的目录就不再是B程序exe文件所在的文件夹路径了，而是变成了A所在目录了。这就很明了的解释了上面会出现<strong><em>C:\Windows\System32</em></strong>这个奇怪路径的问题了，因为桌面快捷方式是采用<em>cmd.exe</em>去执行的，而这个cmd.exe执行文件就是在<strong><em>C:\Windows\System32</em></strong>的目录下。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 确实是获取当前目录没错，但是如果A程序调用B程序，而B程序里使用了<em>System.Evnironment.CurrentDirectory</em>来获取目录，那个B程序里获取到的目录就不再是B程序exe文件所在的文件夹路径了，而是变成了A所在目录了。这就很明了的解释了上面会出现<strong><em>C:\Windows\System32</em></strong>这个奇怪路径的问题了，因为桌面快捷方式是采用<em>explorer.exe</em>去执行的，而这个explorer.exe执行文件就是在<strong><em>C:\Windows\System32</em></strong>的目录下。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;<em>System.Environment.CurrentDirectory</em> 还有一个重要的问题，假如你的应用程序采用OpenFileDialog去打开E盘下名为abc的文件夹下的一个文件，那么获取到的值就为E:\abc了。</p>
 <blockquote>
 <p>后续我们应该怎么做？</p>
