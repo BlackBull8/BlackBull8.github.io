@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html class="no-js" lang="zh-CN">
+<!--
+//                            _ooOoo_
+//                           o8888888o
+//                           88" . "88
+//                           (| -_- |)
+//                            O\ = /O
+//                        ____/`---'\____
+//                      .   ' \\| |// `.
+//                       / \\||| : |||// \
+//                     / _||||| -:- |||||- \
+//                       | | \\\ - /// | |
+//                     | \_| ''\---/'' | |
+//                      \ .-\__ `-` ___/-. /
+//                   ___`. .' /--.--\ `. . __
+//                ."" '< `.___\_<|>_/___.' >'"".
+//               | | : `- \`.;`\ _ /`;.`/ - ` : | |
+//                 \ \ `-. \_ __\ /__ _/ .-` / /
+//         ======`-.____`-.___\_____/___.-`____.-'======
+//                            `=---='
+//                 拦截插件累计拦截逗比攻击"1381438"次！
+//         .............................................
+//                  佛祖保佑             永无BUG
+//          佛曰:
+//                  写字楼里写字间，写字间里程序员；
+//                  程序人员写程序，又拿程序换酒钱。
+//                  酒醒只在网上坐，酒醉还来网下眠；
+//                  酒醉酒醒日复日，网上网下年复年。
+//                  但愿老死电脑间，不愿鞠躬老板前；
+//                  奔驰宝马贵者趣，公交自行程序员。
+//                  别人笑我忒疯癫，我笑自己命太贱；
+//                  不见满街漂亮妹，哪个归得程序员？
+-->
+<head>
+    <!--[if lte IE 9]>
+<meta http-equiv="refresh" content="0;url=http://yoursite.com/warn.html">
+<![endif]-->
+<meta charset="utf-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+<meta http-equiv="mobile-agent" content="format=html5; url=http://yoursite.com">
+<meta name="author" content="Helius">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/SimpleStyle.min.css">
+
+<link rel="shortcut icon" href="/images/favicon.png">
+
+
+<title>git submodule 使用教程 - Helius随心记</title>
+
+<meta name="keywords" content="">
+
+<meta name="description " content="">
+</head>
+<body>
+<div id="nav">
+    <nav class="nav-menu">
+        <a class="site-name current" href="/" title="说">说</a>
+        <a class="site-index current" href="/"><i class="fa fa-home"></i><span>首页</span></a>
+        <a href="/archives" title="归档"><i class="fa fa-archives"></i><span>归档</span></a>
+        <a href="/tags" title="标签"><i class="fa fa-tags"></i><span>标签</span></a>
+        <!-- custom single page of menus -->
+        
+        
+        <a href="/help" title="帮助">
+            <i class="fa fa-question-circle"></i>
+            <span>帮助</span>
+        </a>
+        
+    </nav>
+</div>
+
+<div class="nav-user">
+    <a class="btn-search" href="#"><i class="fa fa-search"></i></a>
+    <a class="btn-read-mode" href="#"><i class="fa fa-sun-o"></i></a>
+    <a class="btn-sns-qr" href="javascript:"><i class="fa fa-telegram"></i></a>
+</div>
+
+<div id="wrapper" class="clearfix">
+    <div id="body">
+        <div class="main" id="main">
+            <div id="cover">
+    <div class="cover-img"></div>
+    <div class="cover-info">
+        
+        <h1 class="cover-siteName">说IT</h1>
+        <h3 class="cover-siteTitle">做产品，写代码</h3>
+        <p class="cover-siteDesc">一个关注技术与人文的IT博客</p>
+        <div class="cover-sns">
+            
+            <div class="btn btn-telegram">
+                <a href="http://t.me/kunyintang" target="_blank" title="telegram" ref="friend">
+                    <i class="fa fa-telegram"></i>
+                </a>
+            </div>
+            
+            <div class="btn btn-instagram">
+                <a href="https://www.instagram.com/mtangsir/" target="_blank" title="instagram" ref="friend">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+            
+            <div class="btn btn-twitter">
+                <a href="https://twitter.com/tangkunyin" target="_blank" title="twitter" ref="friend">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </div>
+            
+            <div class="btn btn-github">
+                <a href="https://github.com/tangkunyin" target="_blank" title="github" ref="friend">
+                    <i class="fa fa-github"></i>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+            <div class="page-title">
+    <ul>
+        <li><a href="/">最新</a></li>
+        
+        
+        
+        <li class="page-search">
+    <form id="search" class="search-form">
+        <label for="s" class="sr-only">请输入关键字</label>
+        <input class="search-field" type="text" name="s" class="text" placeholder="请输入关键字" />
+        <button type="submit" class="search-form-submit" title="搜索"><i class="fa fa-search"></i></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+</li>
+
+    </ul>
+</div>
+<div class="main-inner">
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <div class="post-header">
+            <div class="post-author clearfix">
+                <a class="avatar fleft" href="" target="_blank">
+                    <img width="48" src="" alt="avatar"/>
+                </a>
+                <p><span class="label">作者</span>
+                    <a href="" target="_blank"></a>
+                    <span title="最后编辑于2018-07-29">2018-07-29</span>
+                </p>
+                <p></p>
+            </div>
+            <h2 class="post-title">git submodule 使用教程</h2>
+            <div class="post-meta">
+                本文总共3638个字 | 您是第<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>位看到它们的小伙伴
+            </div>
+        </div>
+        <div class="post-content markdown-body">
+            <blockquote>
+<p>引言：这次需要做两个SDK，一个是账号SDK，一个是云盘SDK。它们相互独立却又相互耦合。比如云盘的接口所需参数依赖于账号SDK获取到的一些参数。为了方便调试，决定采用Submodule的方式来管理这两个SDK的源码。</p>
+</blockquote>
+<p>1、创建git submodule 测试项目</p>
+<ul>
+<li>准备环境</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> mkdir -p submodule/repos</span><br><span class="line"></span><br><span class="line">-p：p代表parents,表示递归创建目录。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建需要的本地仓库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">创建裸版本库</span><br><span class="line"> cd submodule/repos/</span><br><span class="line"></span><br><span class="line"> git --git-dir=lib1.git init --bare</span><br><span class="line"> git init --bare lib2.git</span><br><span class="line">上面的两个方法是等价的，都是创建裸版本库，建议采用第二种方式，简单明了</span><br><span class="line"> git init --bare project1.git</span><br><span class="line"> git init --bare project2.git</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line"> mkdir -p ws</span><br><span class="line"> cd ws</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">初始化本地project1 project2</span><br><span class="line"> git clone ../repos/project1.git</span><br><span class="line"> cd project1/</span><br><span class="line"></span><br><span class="line"> echo &quot;project1&quot; &gt; project-infos.txt</span><br><span class="line"> git add .</span><br><span class="line"> git commit -m &quot;init project1&quot;</span><br><span class="line"> git push</span><br><span class="line"></span><br><span class="line">project2的初始化命令如上。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">初始化公共库lib1，lib2</span><br><span class="line"> git clone ../repos/lib1.git lib1</span><br><span class="line"> cd lib1/</span><br><span class="line"> echo &quot;I&apos;m lib1&quot; &gt; lib1-features</span><br><span class="line"> git add .</span><br><span class="line"> git co &quot;init lib1&quot;</span><br><span class="line"> git push</span><br><span class="line"></span><br><span class="line">lib2的初始化命令如上</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2、为主模块添加Submodules</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git submodule add ../../repos/lib1.git libs/lib1</span><br><span class="line">git submodule add ../../repos/lib2.git libs/lib2</span><br></pre></td></tr></table></figure>
+<p>执行完上面的命令后，project1项目中就会多出了三个.gitmodules的文件，下面就是该文件的内容，记录了每个submodule的引用信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[submodule &quot;libs/lib1&quot;]</span><br><span class="line">	path = libs/lib1</span><br><span class="line">	url = ../../repos/lib1.git</span><br><span class="line">[submodule &quot;libs/lib2&quot;]</span><br><span class="line">	path = libs/lib2</span><br><span class="line">	url = ../../repos/lib2.git/</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;libs/lib1和libs/lib2 指定了子模块的commit id。使用git diff可以看到这两项内容。其实主版本库的git并不会记录submodules的文件变动的，它是按照commit id 指定submodule的git header，所以三个文件都需要提交到主版本库的远程仓库的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;OK，后面我们就可以在主版本库执行同步命令了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &quot;add submodules[lib1,lib2] to project1&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<p>3、 如何Clone带有Submodule的仓库</p>
+<p>如果要clone带有submodule的仓库，则不仅仅需要git clone的命令搬简单，而是需要几个步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone ../repos/project1.git/ project1-b</span><br><span class="line"></span><br><span class="line">git submodule</span><br><span class="line">执行完此命令后就可以看到submodules的hash码和文件目录，但是前面有一个减号“-”，含义就是该子模块还没有被checkout。</span><br><span class="line">-39655b50f9478ad87d213d0193ee0e4990b716c3 libs/lib1</span><br><span class="line">-6cba9b6d430642cee003908098cbe56b8f2ab673 libs/lib2</span><br><span class="line"></span><br><span class="line">开始检出子模块：</span><br><span class="line">git submodule init：会将submodule的注册信息写到.git/config文件中</span><br><span class="line">git submodule update：开始根据submodule的commitId Clone文件</span><br></pre></td></tr></table></figure>
+<p>4、修改克隆库的submodule</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">查看libs/lib1的状态：</span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line">HEAD detached at 39655b5</span><br><span class="line">nothing to commit, working directory clean</span><br><span class="line">并没有任何分支，这时候我们应该执行下面命令切换到master分支：</span><br><span class="line"></span><br><span class="line">git checkout master</span><br><span class="line">这时候就转换到master分支了</span><br><span class="line">On branch master</span><br><span class="line">Your branch is up-to-date with &apos;origin/master&apos;.</span><br><span class="line">nothing to commit, working directory clean</span><br><span class="line"></span><br><span class="line">开始修改libs\lib1的内容</span><br><span class="line">echo &quot;add by cangku B&quot; &gt;&gt;lib1-features</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;update lib1-features&quot;</span><br><span class="line"></span><br><span class="line">这时候回到主版本库执行git status，会出现如下说明：</span><br><span class="line"> modified:   libs/lib1 (new commits)</span><br><span class="line"> </span><br><span class="line">这时候再执行git diff：</span><br><span class="line">-Subproject commit 39655b50f9478ad87d213d0193ee0e4990b716c3</span><br><span class="line">+Subproject commit fc3361728006b5ed28121aa9f06c5f994a00eadd</span><br><span class="line"></span><br><span class="line">回到libs/lib1的版本库中执行git push</span><br><span class="line"></span><br><span class="line">再回到主版本库中，再次执行</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;update submodule&quot;</span><br><span class="line">git push,主版本远程库中引用submodule的commitId才能更新。</span><br></pre></td></tr></table></figure>
+<p>5、更新主项目的submodules</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">切换到project1项目，拉取最新代码：</span><br><span class="line">git pull</span><br><span class="line"></span><br><span class="line">这时候执行git status 命令，会显示如下说明：</span><br><span class="line">modified:   libs/lib1 (new commits)</span><br><span class="line"></span><br><span class="line">这时候其实只拉取了主版本库的最新提交，即更新的submodule的commit id，要更新submodule,要更新submodule,有两种方法：</span><br><span class="line">① 在每个submodule，执行 git submodule init;以及git submodule update</span><br><span class="line">② 在主版本库中执行 git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<p>6、修改lib1和lib2并同步到project1和project2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">① 在project1中修改lib1，添加README文件；修改lib2中lib2-feature文件，同时push到对应的project1的远端仓库中</span><br><span class="line"></span><br><span class="line">② 在project2本地仓库中git pull后，要先确定submodule切换到了对应的分支，然后在各个submodule git pull。</span><br><span class="line"></span><br><span class="line">③ 再次更新project2仓库，git push推送到远端仓库进行同步。</span><br></pre></td></tr></table></figure>
+<p>7、高效的clone带submodule的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive ../repos/lib1.git</span><br></pre></td></tr></table></figure></p>
+<p>8、移除submodule</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">git rm -r --cached libs/</span><br><span class="line">rm -rf libs</span><br><span class="line"></span><br><span class="line">rm .gitmodules</span><br><span class="line"></span><br><span class="line">删除.git/config的submodule配置源文件</span><br><span class="line">[submodule &quot;libs/lib1&quot;]</span><br><span class="line">    url = /home/henryyan/submd/repos/lib1.git</span><br><span class="line">[submodule &quot;libs/lib2&quot;]</span><br><span class="line">    url = /home/henryyan/submd/repos/lib2.git</span><br><span class="line">将上面的内容删掉</span><br><span class="line"></span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;XXX&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+        </div>
+        <div class="post-tool">
+            <a class="btn-thumbs-up" href="javascript:void(0);" data-cid="52" title="95">
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 打赏
+            </a>
+        </div>
+        
+        <div class="post-tags">标签：
+            
+        </div>
+        
+    </article>
+    
+    <p>本文代表个人观点，内容仅供参考。若有不恰当之处，望不吝赐教！</p>
+    
+    
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        </div><!-- end #main-->
+    </div><!-- end #body -->
+    <footer class="footer">
+    <div class="footer-inner">
+        <p>
+            <a href="/about"  title="关于本站">关于本站</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <!-- 自定义链接 -->
+            <a href="/help" title="help" >急救中心</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/links" title="友情链接">友情链接</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/app" title="App下载">App下载</a>
+        </p>
+        <p>
+            本站点采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>，已建立<a href="/timeline" id="siteBuildingTime"></a>天<br/>
+            ©2017 基于<a href="http://hexo.io" target="_blank">Hexo</a>搭建
+            ，主题&nbsp<a href="https://github.com/tangkunyin/hexo-theme-jsimple" target="_blank">JSimple</a>
+            ，作者<a href="https://www.tangkunyin.com" target="_blank">唐先森</a>
+            ，Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a>
+        </p>
+        
+
+    </div>
+</footer>
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="/js/InsightSearch.js"></script>
+<script src="/js/SimpleCore.js"></script>
+
+</div>
+<div class="fixed-btn">
+    <a class="btn-gotop" href="javascript:"> <i class="fa fa-angle-up"></i></a>
+</div>
+<script>
+    $(function () {
+        SimpleCore.init({
+            buildingTime: '01/20/2018',
+            current: $('.post-tags').length > 0 ? 'post' : 'archive',
+            snsQRCode: '/images/sns-qrcode.png',
+            donateImg: '/images/donate-qr.png',
+        });
+    });
+</script>
+</body>
+</html>
